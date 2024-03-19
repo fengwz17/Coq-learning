@@ -263,16 +263,21 @@ Definition orb' (b1:bool) (b2:bool) : bool :=
     会发生这种情况。 *)
 
 Definition nandb (b1:bool) (b2:bool) : bool
-  (* 将本行替换成 ":= _你的_定义_ ." *). Admitted.
+  := match (b1, b2) with
+  | (true, false) => true
+  | (true, true) => false
+  | (false, true) => true 
+  | (false, false) => true
+  end.  
 
 Example test_nandb1:               (nandb true false) = true.
-(* 请在此处解答 *) Admitted.
+Proof. simpl. reflexivity. Qed. 
 Example test_nandb2:               (nandb false false) = true.
-(* 请在此处解答 *) Admitted.
+Proof. simpl. reflexivity. Qed.
 Example test_nandb3:               (nandb false true) = true.
-(* 请在此处解答 *) Admitted.
+Proof. simpl. reflexivity. Qed.
 Example test_nandb4:               (nandb true true) = false.
-(* 请在此处解答 *) Admitted.
+Proof. simpl. reflexivity. Qed.
 (** [] *)
 
 (** **** 练习：1 星, standard (andb3) 
@@ -281,16 +286,19 @@ Example test_nandb4:               (nandb true true) = false.
     此函数应在所有输入均为 [true] 时返回 [true]，否则返回 [false]。 *)
 
 Definition andb3 (b1:bool) (b2:bool) (b3:bool) : bool
-  (* 将本行替换成 ":= _你的_定义_ ." *). Admitted.
+  := match b1, b2, b3 with
+  | true, true, true => true
+  | _, _, _ => false
+  end.
 
 Example test_andb31:                 (andb3 true true true) = true.
-(* 请在此处解答 *) Admitted.
+Proof. simpl. reflexivity. Qed.
 Example test_andb32:                 (andb3 false true true) = false.
-(* 请在此处解答 *) Admitted.
+Proof. simpl. reflexivity. Qed.
 Example test_andb33:                 (andb3 true false true) = false.
-(* 请在此处解答 *) Admitted.
+Proof. simpl. reflexivity. Qed.
 Example test_andb34:                 (andb3 true true false) = false.
-(* 请在此处解答 *) Admitted.
+Proof. simpl. reflexivity. Qed.
 (** [] *)
 
 (* ================================================================= *)
@@ -643,13 +651,16 @@ Fixpoint exp (base power : nat) : nat :=
 
     把它翻译成 Coq 代码。 *)
 
-Fixpoint factorial (n:nat) : nat
-  (* 将本行替换成 ":= _你的_定义_ ." *). Admitted.
+Fixpoint factorial (n:nat) : nat :=
+  match n with 
+    | O => S O
+    | S n' => mult n (factorial n')
+  end. 
 
 Example test_factorial1:          (factorial 3) = 6.
-(* 请在此处解答 *) Admitted.
+Proof. reflexivity. Qed.
 Example test_factorial2:          (factorial 5) = (mult 10 12).
-(* 请在此处解答 *) Admitted.
+Proof. simpl. reflexivity. Qed.
 (** [] *)
 
 (** 我们可以通过引入加法、乘法和减法的_'记法（Notation）'_来让数字表达式更加易读。 *)
@@ -724,17 +735,25 @@ Proof. simpl. reflexivity.  Qed.
     请利用前文定义的函数写出该定义，不要使用 [Fixpoint] 构造新的递归。
     （只需前文中的一个函数即可实现该定义，不过也可两者皆用。） *)
 
-Definition ltb (n m : nat) : bool
-  (* 将本行替换成 ":= _你的_定义_ ." *). Admitted.
+Definition ltb (n m : nat) : bool :=
+  (* match leb n m with
+  | true => 
+    match eqb n m with 
+    | true => false
+    | false => true
+    end
+  | _ => false
+  end. *)
+  (negb (eqb n m)) && (leb n m).
 
 Notation "x <? y" := (ltb x y) (at level 70) : nat_scope.
 
 Example test_ltb1:             (ltb 2 2) = false.
-(* 请在此处解答 *) Admitted.
+Proof. simpl. reflexivity. Qed.
 Example test_ltb2:             (ltb 2 4) = true.
-(* 请在此处解答 *) Admitted.
+Proof. simpl. reflexivity. Qed.
 Example test_ltb3:             (ltb 4 2) = false.
-(* 请在此处解答 *) Admitted.
+Proof. simpl. reflexivity. Qed.
 (** [] *)
 
 (* ################################################################# *)
